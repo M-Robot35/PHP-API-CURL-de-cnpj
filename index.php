@@ -1,46 +1,5 @@
-<?php
-    class apiconsultacnpj{
 
-        // URL BASE PARA CONSULTAR NA API
-        private $url_base = 'https://api-publica.speedio.com.br';
-                
-        
-        public function consultarCnpj($cnpj){
-
-            $parametros = "/buscarcnpj?cnpj=";
-
-            $link = $this->url_base . $parametros . preg_replace("/\D/", '', $cnpj);
-
-            $curl = curl_init();
-
-            // CONFIGURAÇÃO CURL
-            curl_setopt_array($curl, [
-                CURLOPT_URL => $link,
-                CURLOPT_RETURNTRANSFER => TRUE,
-                CURLOPT_CUSTOMREQUEST  => "GET",
-            ]);
-
-            // CURL EXECUTAR
-            $response_curl = curl_exec($curl);
-
-            // RESPONSE IN ARRAY
-            $response_array = json_decode($response_curl, true);
-
-            if (isset($response_array['detail'])){
-                die("<h1> Serviço Indisponivel </h1>");
-            }
-
-            if (isset($response_array['error'])){
-                die("<h1> CNPJ não encontrado </h1>");
-            }
-            
-            return is_array($response_array)? $response_array : [];         
-            
-        }
-
-    }
-
-?>
+<?php include_once "./pesquisa.php";?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -56,10 +15,14 @@
     </style>
 </head>
 <body>
+    <a href="./index.php">pagina principal [Teste ]</a><br><br>
+    <a href="./sessao.php">Area de sessao [Teste ]</a>
+    <br>
+    <hr>
     <h1>Consumindo API SPEEDIO | CNPJ: <a href="https://apiconsultacnpj.com.br/">Site da Api</a></h1>
     <?php
 
-        $cnpj = "00000000000-1.9";
+        $cnpj = "00000000000191";
         $consultar = new apiconsultacnpj;
         $result = $consultar->consultarCnpj($cnpj);
 
